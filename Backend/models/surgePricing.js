@@ -39,6 +39,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(20),
       allowNull: false,
     },
+    latitude: {
+      type: DataTypes.DECIMAL(10, 8),
+      allowNull: false,
+    },
+    longitude: {
+      type: DataTypes.DECIMAL(11, 8),
+      allowNull: false,
+    },
   });
 
   return SurgePricing;

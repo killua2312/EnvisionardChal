@@ -24,7 +24,7 @@ const OrderDashboard = () => {
   }, [activeOrders, selectedOrder, selectOrder]);
 
   return (
-    <div className="order-dashboard" style={{ display: "flex" }}>
+    <div className="dashboard" style={{ display: "flex" }}>
       <OrderSidebar
         activeOrders={activeOrders}
         onOrderSelect={selectOrder}

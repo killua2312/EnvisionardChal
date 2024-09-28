@@ -1,8 +1,16 @@
 const DemandLevel = ({ demandLevel }) => {
   return (
-    <div className="demand-level">
+    <div className="card">
       <h3>Demand Level</h3>
-      <p>{demandLevel}</p>
+      <div className="demand-levels">
+        <div
+          className={`demand-level ${demandLevel
+            .toLowerCase()
+            .replace(" ", "-")}`}
+        >
+          {demandLevel}
+        </div>
+      </div>
     </div>
   );
 };

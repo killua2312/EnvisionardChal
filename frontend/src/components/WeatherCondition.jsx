@@ -1,6 +1,6 @@
 const WeatherCondition = ({ weatherCondition }) => {
   return (
-    <div className="weathe-condition">
+    <div className="card">
       <h3>Weather Condition</h3>
       <p>{weatherCondition}</p>
     </div>

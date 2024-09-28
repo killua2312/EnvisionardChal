@@ -13,7 +13,7 @@ const Navigation = () => {
   if (!user) return null;
 
   return (
-    <nav>
+    <nav className="top-nav">
       <ul>
         <li>
           <Link to="/">Order Dashboard</Link>

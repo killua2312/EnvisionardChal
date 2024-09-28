@@ -99,8 +99,8 @@ const calculateSurgePricing = async (latitude, longitude) => {
       active_orders: ordersInProximity,
       available_drivers: driversInProximity,
       weather_condition: weatherCondition,
-      latitude,
-      longitude,
+      latitude: latitude,
+      longitude: longitude,
     };
 
     // Save to the database
@@ -113,16 +113,10 @@ const calculateSurgePricing = async (latitude, longitude) => {
       JSON.stringify(savedSurgePricing)
     );
 
-    const emitData = {
-      ...savedSurgePricing.toJSON(),
-      latitude,
-      longitude,
-    };
-
     // Emit the calculated surge pricing
     const io = socket.getIo();
     io.emit("surgePricingUpdate", {
-      surgePricingData: emitData,
+      surgePricingData: savedSurgePricing,
       proximityDrivers,
     });
 

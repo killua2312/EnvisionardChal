@@ -23,40 +23,42 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button type="submit">Sign Up</button>
-      </form>
-      <p>
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Sign Up</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button type="submit">Sign Up</button>
+        </form>
+        <p>
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
+      </div>
     </div>
   );
 };

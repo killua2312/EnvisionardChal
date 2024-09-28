@@ -1,42 +1,408 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* Global Styles */
+:root {
+  --primary-color: #64b5f6;
+  --secondary-color: #4db6ac;
+  --background-color: #121212;
+  --card-background: #1e1e1e;
+  --text-color: #e0e0e0;
+  --border-color: #333333;
+  --demand-very-low: #1a3947;
+  --demand-low: #1b4d3e;
+  --demand-normal: #4d4636;
+  --demand-high: #4d3c2e;
+  --demand-very-high: #4d2c2c;
+  --demand-extreme: #541e1e;
+  --demand-text-very-low: #81d4fa;
+  --demand-text-low: #a5d6a7;
+  --demand-text-normal: #fff59d;
+  --demand-text-high: #ffcc80;
+  --demand-text-very-high: #ffab91;
+  --demand-text-extreme: #ef9a9a;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+/* Dashboard Layout */
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  flex: 1;
+  min-width: 250px;
+}
+
+.card h2,
+.card h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+
+/* Current Delivery Fee */
+.price {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.multiplier {
+  font-size: 1.2em;
+  color: var(--secondary-color);
+}
+
+/* Demand Levels */
+.demand-levels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.demand-level {
+  padding: 8px 12px;
+  border-radius: 20px;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.demand-level.very-low {
+  background-color: #e0f7fa;
+  color: #006064;
+}
+.demand-level.low {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+.demand-level.normal {
+  background-color: #fff9c4;
+  color: #f57f17;
+}
+.demand-level.high {
+  background-color: #ffecb3;
+  color: #ff6f00;
+}
+.demand-level.very-high {
+  background-color: #ffccbc;
+  color: #bf360c;
+}
+.demand-level.extreme {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+}
+
+/* Weather Condition */
+.weather-condition {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+}
+
+.weather-icon {
+  font-size: 2em;
+  margin-right: 15px;
+}
+
+/* Real-time Driver Map */
+.map {
+  height: 300px;
+  background-color: #242424;
+  position: relative;
+  border-radius: 8px;
+}
+
+.driver {
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+}
+
+/* Simulation Controls */
+.simulation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.simulation-controls input,
+.simulation-controls select {
+  border-color: var(--background-color);
+  color: var(--text-color);
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.simulation-controls button {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.simulation-controls button:hover {
+  background-color: #1e88e5;
+}
+
+/* Top Navigation */
+.top-nav {
+  background-color: var(--card-background);
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.top-nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.top-nav li {
+  margin-right: 20px;
+}
+
+.top-nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.top-nav a:hover {
+  color: var(--primary-color);
+}
+
+/* Order Sidebar */
+.order-sidebar {
+  width: 250px;
+  background-color: var(--card-background);
+  border-right: 1px solid var(--border-color);
+  height: calc(100vh - 50px); /* Adjust based on top nav height */
+  overflow-y: auto;
+}
+
+.order-sidebar h3 {
+  padding: 15px;
+  margin: 0;
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}
+
+.order-list {
+  padding: 10px;
+}
+
+.order-item {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.order-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.order-item.selected {
+  background-color: rgba(100, 181, 246, 0.2);
+}
+
+/* Login and Signup Pages */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--background-color);
+}
+
+.auth-card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-card h2 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.auth-form {
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.auth-form input,
+.auth-form select {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.auth-form button {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #1e88e5;
+}
+
+.auth-form .error {
+  color: #ef5350;
+  margin-bottom: 1rem;
+}
+
+.auth-form p {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.auth-form a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.auth-form a:hover {
+  text-decoration: underline;
+}
+
+/* Analytics Dashboard */
+.analytics-dashboard {
+  padding: 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.analytics-dashboard h1 {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.analytics-dashboard h2 {
+  color: var(--secondary-color);
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.chart {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.date-picker {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.date-picker input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.table {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--primary-color);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Recharts customization for dark theme */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--border-color);
+}
+
+.recharts-text {
+  fill: var(--text-color);
+}
+
+.recharts-tooltip-wrapper {
+  background-color: var(--card-background) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  .card {
+    width: 100%;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .order-sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

@@ -1,9 +1,9 @@
 const CurrentDeliveryFee = ({ totalFee, surgeMultiplier }) => {
   return (
-    <div className="current-delivery-fee">
+    <div className="card">
       <h3>Current Delivery Fee</h3>
-      <p>Total Fee: ₹{totalFee}</p>
-      <p>Surge Multiplier: {surgeMultiplier}x</p>
+      <p className="price">Total Fee: ₹{totalFee}</p>
+      <p className="multiplier">Surge Multiplier: {surgeMultiplier}x</p>
     </div>
   );
 };

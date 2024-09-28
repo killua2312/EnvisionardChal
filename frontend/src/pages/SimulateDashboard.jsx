@@ -10,7 +10,7 @@ const SimulateDashboard = () => {
   };
 
   return (
-    <div className="simulate-dashboard">
+    <div className="dashboard">
       <h2>Simulate Dashboard</h2>
       {simulatePricingData && (
         <CurrentDeliveryFee
@@ -18,7 +18,9 @@ const SimulateDashboard = () => {
           surgeMultiplier={simulatePricingData.surge_multiplier}
         />
       )}
-      <SimulationControls onSimulate={handleSimulate} />
+      <div className="card">
+        <SimulationControls onSimulate={handleSimulate} />
+      </div>
     </div>
   );
 };

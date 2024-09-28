@@ -30,6 +30,7 @@ app.use("/api/auth", require("./routes/userRouter"));
 app.use("/api/drivers", require("./routes/driverRouter"));
 app.use("/api/orders", require("./routes/orderRouter"));
 app.use("/api/surge-pricing", require("./routes/surgePricingRouter"));
+app.use("/api/analytics", require("./routes/analyticsRouter"));
 
 // Set up WebSocket
 setupWebSocket(io);

@@ -1,3 +1,4 @@
+import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,7 +13,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import OrderDashboard from "./pages/OrderDashboard";
 import SimulateDashboard from "./pages/SimulateDashboard";
-// import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 
 const PrivateRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
@@ -58,14 +59,14 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              {/* <Route
+              <Route
                 path="/analytics"
                 element={
                   <PrivateRoute allowedRoles={["admin"]}>
                     <AnalyticsDashboard />
                   </PrivateRoute>
                 }
-              /> */}
+              />
             </Routes>
           </Router>
         </SurgePricingProvider>
