@@ -39,7 +39,7 @@ const surgePricingController = {
 
       // Calculate surge pricing
       // This will emit the result via WebSocket
-      simulateSurgePricing(simulateData);
+      await simulateSurgePricing(simulateData);
 
       res
         .status(202)

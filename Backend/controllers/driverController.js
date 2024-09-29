@@ -47,7 +47,10 @@ const driverController = {
       const { status } = req.body;
 
       // This emits "driversUpdate" through WebSocket.
-      await driverService.updateDriverStatus(driverId, status);
+      const updatedDriver = await driverService.updateDriverStatus(
+        driverId,
+        status
+      );
 
       res.json(driverId);
     } catch (error) {

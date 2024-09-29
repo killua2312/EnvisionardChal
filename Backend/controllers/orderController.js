@@ -28,7 +28,11 @@ const orderController = {
       const updateData = req.body;
 
       // This emits "ordersUpdate" through WebSocket
-      await orderService.updateOrderStatus(orderId, updateData);
+      const updatedOrder = await orderService.updateOrderStatus(
+        orderId,
+        updateData
+      );
+      res.json(updatedOrder);
     } catch (error) {
       console.error("Error in updateOrder controller:", error);
       if (error.message.includes("not found")) {

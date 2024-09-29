@@ -10,18 +10,46 @@ module.exports = (sequelize, DataTypes) => {
     base_fee: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      validate: {
+        isNonNegative(value) {
+          if (parseFloat(value) < 0) {
+            throw new Error("Total amount must be non-negative");
+          }
+        },
+      },
     },
     surge_fee: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      validate: {
+        isNonNegative(value) {
+          if (parseFloat(value) < 0) {
+            throw new Error("Total amount must be non-negative");
+          }
+        },
+      },
     },
     total_fee: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      validate: {
+        isNonNegative(value) {
+          if (parseFloat(value) < 0) {
+            throw new Error("Total amount must be non-negative");
+          }
+        },
+      },
     },
     surge_multiplier: {
       type: DataTypes.DECIMAL(5, 2),
       allowNull: false,
+      validate: {
+        isNonNegative(value) {
+          if (parseFloat(value) < 0) {
+            throw new Error("Total amount must be non-negative");
+          }
+        },
+      },
     },
     demand_level: {
       type: DataTypes.STRING(20),

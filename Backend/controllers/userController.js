@@ -1,6 +1,5 @@
 const userService = require("../services/userService");
 const { body, validationResult } = require("express-validator");
-const { verifyToken } = require("../utils/jwtUtils");
 
 const userController = {
   validateSignup: [

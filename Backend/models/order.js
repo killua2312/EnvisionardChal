@@ -40,6 +40,13 @@ module.exports = (sequelize, DataTypes) => {
       total_amount: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
+        validate: {
+          isNonNegative(value) {
+            if (parseFloat(value) < 0) {
+              throw new Error("Total amount must be non-negative");
+            }
+          },
+        },
       },
     },
     {

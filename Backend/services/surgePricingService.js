@@ -158,8 +158,6 @@ const simulateSurgePricing = async (simulateData) => {
     active_orders: ordersInProximity,
     available_drivers: driversInProximity,
     weather_condition: weatherCondition,
-    latitude,
-    longitude,
   };
 
   // Emit the simulted surge pricing

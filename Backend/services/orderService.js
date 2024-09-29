@@ -2,6 +2,15 @@ const { Order } = require("../models");
 const { orderUtils } = require("../utils/orderUtils");
 const socket = require("../socket");
 
+const normalizeOrderFormat = (order) => {
+  return {
+    id: order.id,
+    status: order.status,
+    latitude: parseFloat(order.latitude),
+    longitude: parseFloat(order.longitude),
+  };
+};
+
 const createOrder = async (orderData) => {
   try {
     // Create the order in the database
@@ -24,7 +33,7 @@ const createOrder = async (orderData) => {
     return newOrder;
   } catch (error) {
     console.error("Error in createOrder:", error);
-    throw error;
+    throw new Error(`Error in createOrder: ${error.message}`);
   }
 };
 
@@ -83,45 +92,39 @@ const getAllActiveOrders = async () => {
     return activeOrders.filter(Boolean);
   } catch (error) {
     console.error("Error in getAllActiveOrders:", error);
-    throw error;
+    throw new Error(`Error in getAllActiveOrders: ${error.message}`);
   }
 };
 
-const normalizeOrderFormat = (order) => {
-  return {
-    id: order.id,
-    status: order.status,
-    latitude: Number(order.latitude),
-    longitude: Number(order.longitude),
-  };
-};
-
-const updateOrderStatus = async (orderId, newStatus) => {
+const updateOrderStatus = async (orderId, updateData) => {
   try {
     // Update the order's status in the database
-    const [updatedRows] = await Order.update(
-      { status: newStatus },
-      { where: { id: orderId } }
-    );
+    const [updatedRows] = await Order.update(updateData, {
+      where: { id: orderId },
+    });
 
     if (updatedRows === 0) {
       throw new Error(`Order with id ${orderId} not found`);
     }
 
     // Update the order's status in Redis
-    await orderUtils.updateOrderStatus(orderId, newStatus);
+    await orderUtils.updateOrderStatus(orderId, updateData.status);
 
     // Fetch the updated order data
     const updatedOrder = await Order.findByPk(orderId);
 
     // Emit socket event for real-time updates
     const io = socket.getIo();
-    io.emit("ordersUpdate", { orderId, newStatus });
+    io.emit("ordersUpdate", () => {
+      return getAllActiveOrders();
+    });
 
     return updatedOrder;
   } catch (error) {
     console.error(`Error in updateOrderStatus for order ${orderId}:`, error);
-    throw error;
+    throw new Error(
+      `Error in updateOrderStatus for order ${orderId}: ${error.message}`
+    );
   }
 };
 
@@ -129,4 +132,5 @@ module.exports = {
   createOrder,
   getAllActiveOrders,
   updateOrderStatus,
+  normalizeOrderFormat,
 };

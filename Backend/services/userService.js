@@ -16,7 +16,7 @@ const userService = {
       });
       console.log(
         "User created successfully",
-        JSON.stringify(newUser.toJSON(), null, 2)
+        JSON.stringify(newUser, null, 2)
       );
       return newUser;
     } catch (error) {
