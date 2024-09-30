@@ -18,7 +18,9 @@ const AnalyticsDashboard = () => {
   const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
-    fetchData();
+    if (startDate && endDate) {
+      fetchData();
+    }
   }, [startDate, endDate]);
 
   const fetchData = async () => {

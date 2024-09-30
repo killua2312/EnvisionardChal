@@ -55,10 +55,16 @@ export const surgePricingAPI = {
 
 // Analytics API calls
 export const analyticsAPI = {
-  getAverageSurgeMultiplier: () => api.get("/analytics/average-multiplier"),
-  getAverageSurgeMultiplierByArea: () =>
-    api.get("/analytics/average-multiplier-by-area"),
-  getSurgePricingFrequency: () => api.get("/analytics/surge-frequency"),
+  getAverageSurgeMultiplier: (startDate, endDate) =>
+    api.get("/analytics/average-multiplier", {
+      params: { startDate, endDate },
+    }),
+  getAverageSurgeMultiplierByArea: (startDate, endDate) =>
+    api.get("/analytics/average-multiplier-by-area", {
+      params: { startDate, endDate },
+    }),
+  getSurgePricingFrequency: (startDate, endDate) =>
+    api.get("/analytics/surge-frequency", { params: { startDate, endDate } }),
 };
 
 export default api;
