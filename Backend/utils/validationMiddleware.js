@@ -11,7 +11,6 @@ const validateInput = (req, res, next) => {
 
 // common validation rules
 const commonRules = {
-  id: param("id").isUUID(),
   latitude: body("latitude").isFloat({ min: -90, max: 90 }),
   longitude: body("longitude").isFloat({ min: -180, max: 180 }),
   status: body("status").isIn([
@@ -34,15 +33,8 @@ const validationRules = {
     body("current_latitude").isFloat({ min: -90, max: 90 }),
     body("current_longitude").isFloat({ min: -180, max: 180 }),
   ],
-  updateDriverLocation: [
-    commonRules.id,
-    commonRules.latitude,
-    commonRules.longitude,
-  ],
-  updateDriverStatus: [
-    commonRules.id,
-    body("status").isIn(["available", "unavailable"]),
-  ],
+  updateDriverLocation: [commonRules.latitude, commonRules.longitude],
+  updateDriverStatus: [body("status").isIn(["available", "unavailable"])],
   createOrder: [
     body("customer_latitude").isFloat({ min: -90, max: 90 }),
     body("customer_longitude").isFloat({ min: -180, max: 180 }),
@@ -51,7 +43,6 @@ const validationRules = {
     body("total_amount").isFloat({ min: 0 }),
   ],
   updateOrderStatus: [
-    commonRules.id,
     body("status").isIn(["active", "delivered", "cancelled"]),
   ],
   getSurgePricing: [commonRules.latitude, commonRules.longitude],

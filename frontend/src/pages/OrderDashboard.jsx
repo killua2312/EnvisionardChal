@@ -19,7 +19,7 @@ const OrderDashboard = () => {
     if (activeOrders.length > 0 && !selectedOrder) {
       selectOrder(activeOrders[0]);
     }
-  }, [activeOrders, selectedOrder, selectOrder]);
+  }, [activeOrders, selectedOrder, selectOrder, proximityDrivers]);
 
   return (
     <div className="dashboard" style={{ display: "flex" }}>

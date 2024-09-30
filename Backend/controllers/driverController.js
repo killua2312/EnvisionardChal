@@ -28,9 +28,13 @@ const driverController = {
       const { latitude, longitude } = req.body;
 
       // This emits "driversUpdate" through WebSocket
-      await driverService.updateDriverLocation(driverId, latitude, longitude);
+      const updatedDriver = await driverService.updateDriverLocation(
+        driverId,
+        latitude,
+        longitude
+      );
 
-      res.json(driverId);
+      res.json(updatedDriver);
     } catch (error) {
       console.error("Error in updateDriverLocation controller:", error);
       if (error.message.includes("not found")) {
@@ -52,7 +56,7 @@ const driverController = {
         status
       );
 
-      res.json(driverId);
+      res.json(updatedDriver);
     } catch (error) {
       console.error("Error in updateDriverStatus controller:", error);
       if (error.message.includes("not found")) {
