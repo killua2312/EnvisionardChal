@@ -6,9 +6,12 @@ const {
 } = require("../utils/proximityUtils");
 const weatherService = require("./weatherService");
 const socket = require("../socket");
+const logger = require("../config/logger");
 
+// constants for pricing calculation
 const BASE_DELIVERY_FEE = 5.0; // Base delivery fee in rupees
 const MAX_SURGE_MULTIPLIER = 2.5; // Maximum surge multiplier
+const RADIUS_KMS = 5; // Radius to get the drivers and orders near the customer
 
 // Calculate surge Factor based on the drivers and orders available in the given km radius
 const calculateSurgeFactor = (driversInProximity, ordersInProximity) => {
@@ -25,6 +28,7 @@ const calculateSurgeFactor = (driversInProximity, ordersInProximity) => {
   const ratio = ordersInProximity / driversInProximity;
 
   // Define surge levels based on the ratio
+  // The higher the ratio, the higher the surge factor and demand level
   if (ratio <= 0.5) {
     surgeFactor = 1.0;
     demandLevel = "Very Low";
@@ -56,23 +60,27 @@ const calculateSurgeFactor = (driversInProximity, ordersInProximity) => {
 // Calculate surge pricing based on surge Factor and weather condition
 const calculateSurgePricing = async (latitude, longitude) => {
   try {
-    console.log(latitude, longitude);
+    logger.info(
+      `Calculating surge pricing for lat: ${latitude}, lon: ${longitude}`
+    );
+
+    // Step 1: Get the number of active orders within given radius (RADIUS_KMS)
     const { totalInProximity: ordersInProximity } =
-      await getActiveOrdersInProximity(latitude, longitude, 5);
-    console.log(ordersInProximity);
+      await getActiveOrdersInProximity(latitude, longitude, RADIUS_KMS);
+    logger.debug(`Orders in proximity: ${ordersInProximity}`);
 
+    // Step 2: Get the number of available drivers within giver radius (RADIUS_KMS)
     const { totalInProximity: driversInProximity, proximityDrivers } =
-      await getAvailableDriversInProximity(latitude, longitude, 5);
+      await getAvailableDriversInProximity(latitude, longitude, RADIUS_KMS);
+    logger.debug(`Drivers in proximity: ${driversInProximity}`);
 
-    console.log(driversInProximity);
-
-    // Get surge factor
+    // Step 3: Calculate surge factor based on the ratio of orders to drivers
     const [surgeFactor, demandLevel] = calculateSurgeFactor(
       driversInProximity,
       ordersInProximity
     );
 
-    // Get current weather condition and its impact
+    // Step 4: Get current weather condition and its impact
     const weatherData = await weatherService.getCurrentWeather(
       latitude,
       longitude
@@ -80,16 +88,19 @@ const calculateSurgePricing = async (latitude, longitude) => {
     const weatherCondition = weatherData.condition;
     const weatherFactor = weatherService.getWeatherImpact(weatherCondition);
 
-    // Calculate final surge multiplier
+    // Step 5: Calculate final surge multiplier
+    // Multiply surge factor by weather factor
     let surgeMultiplier = surgeFactor * weatherFactor;
+    // Ensure surge multiplier doesn't exceed the maximum allowed values
     surgeMultiplier = Math.min(surgeMultiplier, MAX_SURGE_MULTIPLIER);
+    // Ensure surge multiplier is never below 1
     surgeMultiplier = Math.max(surgeMultiplier, 1); // Ensure it's never below 1
 
-    // Calculate surge fee
+    // Step 6: Calculate surge fee and total fee
     const surgeFee = BASE_DELIVERY_FEE * (surgeMultiplier - 1);
     const totalFee = BASE_DELIVERY_FEE + surgeFee;
 
-    // Prepare surge pricing data
+    // Step 7: Prepare surge pricing data
     const surgePricingData = {
       base_fee: BASE_DELIVERY_FEE,
       surge_fee: surgeFee,
@@ -103,26 +114,30 @@ const calculateSurgePricing = async (latitude, longitude) => {
       longitude: longitude,
     };
 
-    // Save to the database
+    // Step 8: Save to the surge pricing data to the database
     const savedSurgePricing = await SurgePricing.create(surgePricingData);
 
-    // Cache the result
+    // Step 9: Cache the result for future quick access
     await surgePricingUtils.cache(
       latitude,
       longitude,
       JSON.stringify(savedSurgePricing)
     );
 
-    // Emit the calculated surge pricing
+    // Step 10: Emit the calculated surge pricing via WebSocket
     const io = socket.getIo();
     io.emit("surgePricingUpdate", {
       surgePricingData: savedSurgePricing,
       proximityDrivers,
     });
 
+    logger.info(
+      `Surge Pricing calculated: ${JSON.stringify(surgePricingData)}`
+    );
+    // Return teh calculated surge pricing data and nearby drivers
     return { surgePricingData, proximityDrivers };
   } catch (error) {
-    console.error("Error in calculateSurgePricing:", error);
+    logger.error(`Error in calculateSurgePricing: ${error.message}`, { error });
     throw error;
   }
 };

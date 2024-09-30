@@ -140,7 +140,7 @@ body {
 
 .simulation-controls input,
 .simulation-controls select {
-  border-color: var(--background-color);
+  background-color: var(--background-color);
   color: var(--text-color);
   padding: 8px;
   border: 1px solid var(--border-color);
@@ -166,6 +166,8 @@ body {
   background-color: var(--card-background);
   padding: 10px 20px;
   border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
 }
 
 .top-nav ul {
@@ -173,6 +175,7 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
+  align-items: center;
 }
 
 .top-nav li {
@@ -187,6 +190,11 @@ body {
 
 .top-nav a:hover {
   color: var(--primary-color);
+}
+
+.top-nav .logout-button button {
+  padding: 5px;
+  border-radius: 10px;
 }
 
 /* Order Sidebar */
@@ -301,6 +309,19 @@ body {
 
 .auth-form a:hover {
   text-decoration: underline;
+}
+
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.alert-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
 }
 
 /* Analytics Dashboard */

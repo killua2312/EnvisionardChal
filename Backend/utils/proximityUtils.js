@@ -12,9 +12,6 @@ const getAvailableDriversInProximity = async (
       longitude,
       radiusKm
     );
-
-    console.log(result);
-
     return {
       totalActive: result.totalActive,
       totalInProximity: result.inProximity,
@@ -43,8 +40,6 @@ const getActiveOrdersInProximity = async (
       longitude,
       radiusKm
     );
-
-    console.log(result);
 
     return {
       totalActive: result.totalActive,

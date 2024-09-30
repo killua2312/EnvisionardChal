@@ -26,9 +26,10 @@ const createOrder = async (orderData) => {
 
     // Emit socket event for the new active order
     const io = socket.getIo();
-    io.emit("ordersUpdate", () => {
-      return getAllActiveOrders();
-    });
+    const activeOrders = await getAllActiveOrders();
+    io.emit("ordersUpdate", activeOrders);
+
+    console.log("createOrder", newOrder);
 
     return newOrder;
   } catch (error) {
@@ -115,9 +116,8 @@ const updateOrderStatus = async (orderId, updateData) => {
 
     // Emit socket event for real-time updates
     const io = socket.getIo();
-    io.emit("ordersUpdate", () => {
-      return getAllActiveOrders();
-    });
+    const activeOrders = await getAllActiveOrders();
+    io.emit("ordersUpdate", activeOrders);
 
     return updatedOrder;
   } catch (error) {

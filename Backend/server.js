@@ -5,6 +5,9 @@ const { redis } = require("./config/redis");
 const cors = require("cors");
 const setupWebSocket = require("./utils/webSocketHandler");
 const socket = require("./socket");
+const logger = require("./config/logger");
+const createRateLimiter = require("./utils/rateLimiter");
+const { swaggerUi, specs } = require("./config/swagger");
 
 const app = express();
 const server = http.createServer(app);
@@ -22,8 +25,18 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Apply rate limiter to all requests
+const apiLimter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(apiLimter);
+
 //Middleware
 app.use(express.json());
+
+// Swagger UI middleware
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Routes (to be implemeted)
 app.use("/api/auth", require("./routes/userRouter"));
@@ -40,23 +53,35 @@ const startServer = async () => {
   try {
     // Test database connection
     await sequelize.authenticate();
-    console.log("Database connection has been established successfully");
+    logger.info("Database connection has been established successfully");
 
     // Sync all models with database
     await sequelize.sync({ alter: true });
-    console.log("All models were synchronized successfully");
+    logger.info("All models were synchronized successfully");
 
     // Test Redis connection
     await redis.ping();
-    console.log("Redis connection has been established successfully.");
+    logger.info("Redis connection has been established successfully.");
 
     // Start the server
     server.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      logger.info(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    console.error("Unable to start the server:", error);
+    logger.error(`Unable to start the server: ${error.message}`, { error });
+    process.exit(1);
   }
 };
 
 startServer();
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (error) => {
+  logger.error("Uncaught Exception:", { error });
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (reason, promise) => {
+  logger.error("Unhandled Rejection at:", { promise, reason });
+});

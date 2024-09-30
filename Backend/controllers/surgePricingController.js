@@ -2,14 +2,19 @@ const {
   calculateSurgePricing,
   simulateSurgePricing,
 } = require("../services/surgePricingService");
+const logger = require("../config/logger");
 
 const surgePricingController = {
   getSurgePricing: async (req, res) => {
     try {
       const { latitude, longitude } = req.body;
+      logger.info(
+        `Received surge pricing request for lat: ${latitude}, lon: ${longitude}`
+      );
 
       // Input validation
       if (!latitude || !longitude) {
+        logger.warn("Invalid request: Missing latitude or longitude");
         return res
           .status(400)
           .json({ error: "Latitude and longitude are required" });
@@ -21,14 +26,22 @@ const surgePricingController = {
 
       // Validate parsed values
       if (isNaN(parsedLat) || isNaN(parsedLon)) {
+        logger.warn(
+          `Invalid request: Invalid latitude (${latitude}) or longitude (${longitude})`
+        );
         return res.status(400).json({ error: "Invalid latitude or longitude" });
       }
 
       const response = await calculateSurgePricing(parsedLat, parsedLon);
+      logger.info(
+        `Surge pricing calculated successfully for lat: ${parsedLat}, lon: ${parsedLon}`
+      );
 
       res.json(response);
     } catch (error) {
-      console.error("Error in getSurgePricing controller:", error);
+      logger.error(`Error in getSurgePricing controller: ${error.message}`, {
+        error,
+      });
       res.status(500).json({ error: "Internal server error" });
     }
   },
@@ -41,11 +54,15 @@ const surgePricingController = {
       // This will emit the result via WebSocket
       await simulateSurgePricing(simulateData);
 
+      logger.info("Simulated surge pricing calculation initiated");
       res
         .status(202)
         .json({ message: "Simulated surge pricing calculation initiated" });
     } catch (error) {
-      console.error("Error in getSimulatedPricing controller:", error);
+      logger.error(
+        `Error in getSimulatedPricing controller: ${error.message}`,
+        { error }
+      );
       res.status(500).json({ error: "Internal server error" });
     }
   },

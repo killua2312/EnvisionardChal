@@ -5,18 +5,20 @@ import { useAuth } from "../contexts/AuthContext";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    const success = await login(email, password);
-    if (success) {
-      navigate("/");
-    } else {
-      setError("Invalid email or password");
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate("/");
+      } else {
+        alert("Invalid email or password");
+      }
+    } catch (err) {
+      alert(err.response?.data?.error || "An error occurred during login");
     }
   };
 
@@ -24,7 +26,6 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Login</h2>
-        {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="email"

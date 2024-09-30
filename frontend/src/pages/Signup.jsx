@@ -7,18 +7,20 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("manager");
-  const [error, setError] = useState("");
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    const success = await signup({ username, email, password, role });
-    if (success) {
-      navigate("/");
-    } else {
-      setError("Failed to create an account");
+    try {
+      const success = await signup({ username, email, password, role });
+      if (success) {
+        navigate("/");
+      } else {
+        alert("Failed to create an account");
+      }
+    } catch (err) {
+      alert(err.response?.data?.error || "An error occurred during signup");
     }
   };
 
@@ -26,7 +28,6 @@ const Signup = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Sign Up</h2>
-        {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="text"

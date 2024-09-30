@@ -15,8 +15,6 @@ const OrderDashboard = () => {
     selectOrder,
   } = useSurgePricing();
 
-  console.log("Dashboard proximityDrivers", proximityDrivers);
-
   useEffect(() => {
     if (activeOrders.length > 0 && !selectedOrder) {
       selectOrder(activeOrders[0]);
