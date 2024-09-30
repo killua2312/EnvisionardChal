@@ -8,6 +8,7 @@ This project implements a dynamic surge pricing system for a food delivery platf
 - PostgreSQL
 - Redis
 - Git
+- RapidAPI account (for weather data)
 
 ## System Setup
 
@@ -47,6 +48,7 @@ This project implements a dynamic surge pricing system for a food delivery platf
 ### Redis Setup
 
 1. Install Redis:
+
    - For macOS (using Homebrew):
      ```
      brew install redis
@@ -60,6 +62,7 @@ This project implements a dynamic surge pricing system for a food delivery platf
      ```
 
 2. Start the Redis server:
+
    - For macOS and Linux:
      ```
      redis-server
@@ -72,6 +75,13 @@ This project implements a dynamic surge pricing system for a food delivery platf
    redis-cli ping
    ```
    If Redis is running correctly, it should return "PONG".
+
+### Obtaining Weather API Key
+
+1. Sign up for a RapidAPI account at https://rapidapi.com/
+2. Subscribe to the "Open Weather Map" API: https://rapidapi.com/community/api/open-weather-map/
+3. After subscribing, go to the "Endpoints" tab and find your API key (X-RapidAPI-Key)
+4. Copy this key; you'll need it for the `.env` file in the project setup
 
 ## Project Setup
 
@@ -99,7 +109,7 @@ This project implements a dynamic surge pricing system for a food delivery platf
    POSTGRE_PORT=5432
    REDIS_URL=redis://localhost:6379
    JWT_SECRET=your_jwt_secret
-   OPENWEATHER_API_KEY=Rapid_api_key
+   OPENWEATHER_API_KEY=your_rapidapi_key
    ```
 
    Start the server:
@@ -131,6 +141,7 @@ Here are the main API endpoints:
 - `/api/drivers`: Driver management routes
 - `/api/orders`: Order management routes
 - `/api/surge-pricing`: Surge pricing calculation routes
+- `/api/analytics`: Analytics routes for surge pricing data
 
 For detailed information on each endpoint, please refer to the Swagger UI documentation.
 
@@ -140,4 +151,4 @@ For detailed information on each endpoint, please refer to the Swagger UI docume
 - The frontend is built with React and uses Vite as the build tool.
 - The project uses JWT for authentication. Make sure to include the JWT token in the Authorization header for protected routes.
 - The surge pricing algorithm takes into account factors such as driver availability, order demand, and weather conditions.
-
+- The analytics endpoints provide insights into surge pricing frequency, average multipliers, and area-based statistics.
