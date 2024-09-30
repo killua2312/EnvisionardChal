@@ -251,3 +251,5 @@ For detailed information on each endpoint, please refer to the Swagger UI docume
 - The project uses JWT for authentication. Make sure to include the JWT token in the Authorization header for protected routes.
 - The surge pricing algorithm takes into account factors such as driver availability, order demand, and weather conditions.
 - The analytics endpoints provide insights into surge pricing frequency, average multipliers, and area-based statistics.
+- Winston is used for logging, providing detailed and structured logs for better debugging and monitoring.
+- Rate limiting is implemented to protect the API from abuse and ensure fair usage.
